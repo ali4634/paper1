@@ -412,37 +412,37 @@
             html2pdf().from(resultsDiv).set(opt).save();
         });
 
-        // --- واٹس ایپ کا نیا اور بہتر کوڈ ---
-        document.getElementById('shareWhatsAppBtn').addEventListener('click', () => {
-            const className = classSelect.value;
-            const bookName = bookNameInput.value;
-            let message = `*نتائج برائے ${className}*\n`;
-            if (bookName) {
-                message += `*مضمون: ${bookName}*\n\n`;
-            }
+         document.getElementById('shareWhatsAppBtn').addEventListener('click', () => {
+    const className = classSelect.value;
+    const bookName = bookNameInput.value;
+    let message = `*نتائج برائے ${className}*\n`;
+    if (bookName) {
+        message += `*مضمون: ${bookName}*\n\n`;
+    }
 
-            // نیا اور واضح ہیڈر
-            message += '*رول نمبر/نام | کل نمبر*\n';
-            message += '--------------------------------\n';
+    const rows = resultsBody.querySelectorAll('tr');
+    if (rows.length === 0) {
+        alert('شیئر کرنے کے لیے کوئی نتائج موجود نہیں ہیں۔');
+        return;
+    }
 
-            const rows = resultsBody.querySelectorAll('tr');
-            if (rows.length === 0) {
-                alert('شیئر کرنے کے لیے کوئی نتائج موجود نہیں ہیں۔');
-                return;
-            }
+    // ہر طالب علم کے لیے درست ترتیب میں معلومات شامل کریں
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const name = cells[0].innerText; // پہلا کالم: نام/رول نمبر
+        const total = cells[4].innerText.replace(/<[^>]*>?/gm, ''); // پانچواں کالم: کل نمبر
 
-            // ہر طالب علم کے لیے صرف رول نمبر اور ٹوٹل نمبر شامل کریں
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const name = cells[0].innerText;
-                const total = cells[4].innerText.replace(/<[^>]*>?/gm, ''); // <b> ٹیگ ہٹانے کے لیے
-                
-                message += `${name} | *${total}*\n`;
-            });
+        // 1. پہلے نام/رول نمبر
+        message += `*نام/رول نمبر:* ${name}\n`;
+        // 2. پھر کل نمبر
+        message += `*کل نمبر:* *${total}*\n`;
+        // 3. ہر طالب علم کے بعد ایک خالی لائن
+        message += `--------------------------------\n`;
+    });
 
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        });
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+});
 
         // PWA Service Worker Registration
         if ('serviceWorker' in navigator) {
