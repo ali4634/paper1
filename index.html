@@ -1,0 +1,91 @@
+ <!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیپر مارکنگ ایپ</title>
+    
+    <!-- PWA: مینی فیسٹ فائل کا درست پاتھ -->
+    <link rel="manifest" href="/paper1/manifest.json">
+    <meta name="theme-color" content="#3a3a3a">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <style>
+        /* گرے تھیم کا مکمل اور درست CSS */
+        body { font-family: 'Noto Nastaliq Urdu', 'Segoe UI', Tahoma, sans-serif; background-color: #212121; color: #e0e0e0; margin: 0; padding: 10px; }
+        .container { max-width: 1000px; margin: auto; background: #2c2c2c; padding: 15px; border-radius: 8px; box-shadow: 0 0 20px rgba(0,0,0,0.5); border: 1px solid #444; }
+        h1, h2 { text-align: center; color: #66bb6a; border-bottom: 1px solid #444; padding-bottom: 10px; }
+        .controls { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; padding: 10px; background: #3a3a3a; border-radius: 5px; }
+        label { font-weight: bold; }
+        select, input[type="text"], input[type="number"] { padding: 8px; border-radius: 5px; border: 1px solid #555; background-color: #424242; color: #e0e0e0; width: 180px; text-align: right; }
+        .question-group { border: 1px solid #444; border-radius: 8px; padding: 15px; margin-bottom: 15px; background-color: #3a3a3a; }
+        legend { font-weight: bold; font-size: 1.2em; color: #81c784; padding: 0 10px; }
+        .part { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+        .part input { width: 70px; font-size: 1.1em; text-align: center; }
+        .part .buttons { display: flex; gap: 5px; }
+        .part button { width: 35px; height: 35px; font-size: 1.4em; cursor: pointer; border: none; color: #fff; border-radius: 5px; line-height: 35px; }
+        .plus-btn { background-color: #2e7d32; }
+        .minus-btn { background-color: #c62828; }
+        .total-marks { text-align: center; font-size: 1.5em; font-weight: bold; margin-top: 20px; background-color: #424242; padding: 10px; border-radius: 5px; }
+        .main-buttons { display: flex; justify-content: center; gap: 10px; margin: 20px 0; flex-wrap: wrap; }
+        .main-buttons button { padding: 10px 20px; font-size: 1.1em; cursor: pointer; border-radius: 5px; border: none; color: white; font-weight: bold; }
+        #addStudentBtn { background-color: #0277bd; }
+        #saveResultsBtn { background-color: #388e3c; }
+        #resetClassBtn { background-color: #f9a825; color: #212121; }
+        #exportPdfBtn { background-color: #00838f; }
+        #shareWhatsAppBtn { background-color: #1e88e5; }
+        #deleteBtn { background-color: #c62828; padding: 5px 10px !important; font-size: 0.9em !important; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #444; padding: 10px; text-align: center; }
+        th { background-color: #004d40; color: white; }
+        tbody tr:nth-child(even) { background-color: #373737; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>پیپر مارکنگ ایپ</h1>
+        <div class="controls">
+            <div><label for="classSelect">کلاس منتخب کریں:</label><select id="classSelect"><option value="کلاس اول">کلاس اول</option><option value="کلاس دوم">کلاس دوم</option><option value="کلاس سوم">کلاس سوم</option><option value="کلاس چہارم">کلاس چہارم</option><option value="کلاس پنجم">کلاس پنجم</option><option value="کلاس ششم">کلاس ششم</option></select></div>
+            <div><label for="bookName">کتاب کا نام:</label><input type="text" id="bookName" placeholder="مثلاً: اردو، ریاضی"></div>
+        </div>
+        <div class="marking-section">
+            <h2>مارکنگ ایریا</h2>
+            <div class="student-info" style="display: flex; gap: 15px; align-items: center; margin-bottom: 20px;"><label for="studentName">طالب علم کا نام/رول نمبر:</label><input type="text" id="studentName" placeholder="نام یا رول نمبر درج کریں"></div>
+            <fieldset class="question-group"><legend>سوال نمبر 1</legend><div class="part"><label>جز 1 (10 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q1p1', -0.5, 10)">-</button><button class="plus-btn" onclick="adjustMark('q1p1', 0.5, 10)">+</button></div><input type="number" id="q1p1" min="0" max="10" step="0.5" value="0" oninput="calculateTotal()"></div><div class="part"><label>جز 2 (10 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q1p2', -0.5, 10)">-</button><button class="plus-btn" onclick="adjustMark('q1p2', 0.5, 10)">+</button></div><input type="number" id="q1p2" min="0" max="10" step="0.5" value="0" oninput="calculateTotal()"></div><div class="part"><label>جز 3 (13 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q1p3', -0.5, 13)">-</button><button class="plus-btn" onclick="adjustMark('q1p3', 0.5, 13)">+</button></div><input type="number" id="q1p3" min="0" max="13" step="0.5" value="0" oninput="calculateTotal()"></div></fieldset>
+            <fieldset class="question-group"><legend>سوال نمبر 2</legend><div class="part"><label>جز 1 (10 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q2p1', -0.5, 10)">-</button><button class="plus-btn" onclick="adjustMark('q2p1', 0.5, 10)">+</button></div><input type="number" id="q2p1" min="0" max="10" step="0.5" value="0" oninput="calculateTotal()"></div><div class="part"><label>جز 2 (10 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q2p2', -0.5, 10)">-</button><button class="plus-btn" onclick="adjustMark('q2p2', 0.5, 10)">+</button></div><input type="number" id="q2p2" min="0" max="10" step="0.5" value="0" oninput="calculateTotal()"></div><div class="part"><label>جز 3 (13 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q2p3', -0.5, 13)">-</button><button class="plus-btn" onclick="adjustMark('q2p3', 0.5, 13)">+</button></div><input type="number" id="q2p3" min="0" max="13" step="0.5" value="0" oninput="calculateTotal()"></div></fieldset>
+            <fieldset class="question-group"><legend>سوال نمبر 3</legend><div class="part"><label>جز 1 (10 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q3p1', -0.5, 10)">-</button><button class="plus-btn" onclick="adjustMark('q3p1', 0.5, 10)">+</button></div><input type="number" id="q3p1" min="0" max="10" step="0.5" value="0" oninput="calculateTotal()"></div><div class="part"><label>جز 2 (10 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q3p2', -0.5, 10)">-</button><button class="plus-btn" onclick="adjustMark('q3p2', 0.5, 10)">+</button></div><input type="number" id="q3p2" min="0" max="10" step="0.5" value="0" oninput="calculateTotal()"></div><div class="part"><label>جز 3 (14 نمبر)</label><div class="buttons"><button class="minus-btn" onclick="adjustMark('q3p3', -0.5, 14)">-</button><button class="plus-btn" onclick="adjustMark('q3p3', 0.5, 14)">+</button></div><input type="number" id="q3p3" min="0" max="14" step="0.5" value="0" oninput="calculateTotal()"></div></fieldset>
+            <div class="total-marks">کل نمبر: <span id="totalMarks">0</span> / 100</div>
+            <div class="main-buttons"><button id="addStudentBtn">طالب علم شامل کریں</button></div>
+        </div>
+        <div class="results-section" id="resultsDiv">
+            <h2 id="resultClassName">نتائج</h2>
+            <table id="resultsTable">
+                <thead><tr><th>نام/رول نمبر</th><th>سوال 1</th><th>سوال 2</th><th>سوال 3</th><th>کل نمبر</th><th>عمل</th></tr></thead>
+                <tbody id="resultsBody"></tbody>
+            </table>
+        </div>
+        <div class="main-buttons"><button id="saveResultsBtn">نتائج محفوظ کریں</button><button id="exportPdfBtn">PDF میں ایکسپورٹ کریں</button><button id="shareWhatsAppBtn">واٹس ایپ پر شیئر کریں</button><button id="resetClassBtn">کلاس ری سیٹ کریں</button></div>
+    </div>
+    <script>
+        const partIds = ['q1p1', 'q1p2', 'q1p3', 'q2p1', 'q2p2', 'q2p3', 'q3p1', 'q3p2', 'q3p3'];
+        const classSelect = document.getElementById('classSelect');
+        const bookNameInput = document.getElementById('bookName');
+        const resultsBody = document.getElementById('resultsBody');
+        const resultClassName = document.getElementById('resultClassName');
+        function adjustMark(inputId, delta, max) { const input = document.getElementById(inputId); let currentValue = parseFloat(input.value); currentValue += delta; if (currentValue < 0) currentValue = 0; if (currentValue > max) currentValue = max; input.value = currentValue; calculateTotal(); }
+        function calculateTotal() { let total = 0; partIds.forEach(id => { const input = document.getElementById(id); if (input.value) total += parseFloat(input.value); }); document.getElementById('totalMarks').innerText = total; }
+        function addStudentToTable(student) { const newRow = resultsBody.insertRow(); newRow.innerHTML = `<td>${student.name}</td><td>${student.q1}</td><td>${student.q2}</td><td>${student.q3}</td><td><b>${student.total}</b></td><td><button id="deleteBtn" onclick="deleteStudent(this)">حذف کریں</button></td>`; }
+        function resetMarkingFields() { document.getElementById('studentName').value = ''; partIds.forEach(id => document.getElementById(id).value = 0); calculateTotal(); document.getElementById('studentName').focus(); }
+        document.getElementById('addStudentBtn').addEventListener('click', () => { const studentName = document.getElementById('studentName').value.trim(); if (!studentName) { alert('براہ کرم طالب علم کا نام یا رول نمبر درج کریں۔'); return; } const studentData = { name: studentName, q1: parseFloat(document.getElementById('q1p1').value) + parseFloat(document.getElementById('q1p2').value) + parseFloat(document.getElementById('q1p3').value), q2: parseFloat(document.getElementById('q2p1').value) + parseFloat(document.getElementById('q2p2').value) + parseFloat(document.getElementById('q2p3').value), q3: parseFloat(document.getElementById('q3p1').value) + parseFloat(document.getElementById('q3p2').value) + parseFloat(document.getElementById('q3p3').value) }; studentData.total = studentData.q1 + studentData.q2 + studentData.q3; addStudentToTable(studentData); resetMarkingFields(); });
+        function deleteStudent(button) { if (confirm('کیا آپ واقعی اس طالب علم کو حذف کرنا چاہتے ہیں؟')) { const row = button.parentElement.parentElement; row.remove(); } }
+        function saveResults() { const currentClass = classSelect.value; const currentBook = bookNameInput.value; const rows = resultsBody.querySelectorAll('tr'); const dataToSave = { bookName: currentBook, students: [] }; rows.forEach(row => { const cells = row.querySelectorAll('td'); const studentData = { name: cells[0].innerText, q1: cells[1].innerText, q2: cells[2].innerText, q3: cells[3].innerText, total: cells[4].innerText.replace(/<[^>]*>?/gm, '') }; dataToSave.students.push(studentData); }); localStorage.setItem(`results_${currentClass}`, JSON.stringify(dataToSave)); alert(`'${currentClass}' کے نتائج محفوظ کر لیے گئے ہیں۔`); }
+        function loadResults() { const currentClass = classSelect.value; resultClassName.innerText = `نتائج برائے ${currentClass}`; resultsBody.innerHTML = ''; const savedData = localStorage.getItem(`results_${currentClass}`); if (savedData) { const data = JSON.parse(savedData); bookNameInput.value = data.bookName || ''; data.students.forEach(student => addStudentToTable(student)); } else { bookNameInput.value = ''; } }
+        document.getElementById('saveResultsBtn').addEventListener('click', saveResults);
+        document.getElementById('resetClassBtn').addEventListener('click', () => { const currentClass = classSelect.value; if (confirm(`کیا آپ واقعی '${currentClass}' کا تمام رزلٹ حذف کرنا چاہتے ہیں؟ یہ عمل واپس نہیں کیا جا سکتا۔`)) { resultsBody.innerHTML = ''; bookNameInput.value = ''; localStorage.removeItem(`results_${currentClass}`); alert(`'${currentClass}' کا رزلٹ حذف کر دیا گیا ہے۔`); } });
+        classSelect.addEventListener('change', loadResults);
+        document.getElementById('exportPdfBtn').addEventListener('click', () => { const resultsDiv = document.getElementById('resultsDiv').cloneNode(true); resultsDiv.querySelectorAll('th:last-child, td:last-child').forEach(el => el.remove()); const className = classSelect.value; const bookName = bookNameInput.value; resultsDiv.querySelector('h2').innerText = `نتائج برائے ${className} - ${bookName}`; const opt = { margin: 0.5, filename: `${className}_${bookName}_نتائج.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' } }; html2pdf().from(resultsDiv).set(opt).save(); });
+        document.getElementById('shareWhatsAppBtn').addEventListener('click', () => { const className = classSelect.value; const bookName = bookNameInput.value; let message = `*نتائج برائے ${className}*\n`; if (bookName) message += `*مضمون: ${bookName}*\n\n`; message += `*نام | س1 | س2 | س3 | کل نمبر*\n`; message += `--------------------------------\n`; const rows = resultsBody.querySelectorAll('tr'); rows.forEach(row => { const cells = row.querySelectorAll('td'); const name = cells[0].innerText; const q1 = cells[1].innerText; const q2 = cells[2].innerText; const q3 = cells[3].innerText; const total = cells[4].innerText.replace(/<[^>]*>?/gm, ''); message += `${name} | ${q1} | ${q2} | ${q3} | *${total}*\n`; }); const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`; window.open(whatsappUrl, '_blank'); });
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { loadResults(); navigator.serviceWorker.register('/paper1/sw.js').then(registration => { console.log('ServiceWorker registered:', registration); }).catch(err => { console.log('ServiceWorker registration failed:', err); }); }); } else { window.addEventListener('load', loadResults); }
+    </script>
+</body>
+</html>
