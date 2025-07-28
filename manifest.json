@@ -1,0 +1,22 @@
+ {
+  "name": "پیپر مارکنگ ایپ",
+  "short_name": "پیپر ایپ",
+  "start_url": "/paper1/",
+  "display": "standalone",
+  "background_color": "#212121",
+  "theme_color": "#3a3a3a",
+  "orientation": "any",
+  "scope": "/paper1/",
+  "icons": [
+    {
+      "src": "/paper1/icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/paper1/icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
